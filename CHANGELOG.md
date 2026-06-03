@@ -6,6 +6,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-06-03
+
+### Fixed
+- **Risk Rules section 404**: the sidebar links to each section's URL `path`, but the route
+  resolved the `{section}` segment against the section `key`. Every section had `key === path`
+  except "Risk Rules" (`key='risk'`, `path='risk-rules'`), so `/admin/rebel/risk-rules` 404'd.
+  `Sections::find()` now resolves by `key` **or** `path`; added a test that walks every
+  sidebar URL and asserts it renders.
+
 ## [0.1.1] - 2026-06-03
 
 ### Fixed
