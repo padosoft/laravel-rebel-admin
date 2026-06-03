@@ -24,6 +24,19 @@ it('renders the panel shell for an authorized admin', function (): void {
         ->assertSee('data-rebel-widget="overview"', false);
 });
 
+it('references the published asset path (vendor/rebel-admin), not the package name', function (): void {
+    actingAsPanelAdmin();
+
+    // spatie/laravel-package-tools publishes hasAssets() to public/vendor/{shortName},
+    // and the short name strips the "laravel-" prefix => "rebel-admin". The panel must
+    // point at that exact path or the CSS/JS 404 in a real app.
+    $this->get('/admin/rebel')
+        ->assertOk()
+        ->assertSee('vendor/rebel-admin/rebel-admin.css', false)
+        ->assertSee('vendor/rebel-admin/rebel-admin.js', false)
+        ->assertDontSee('vendor/laravel-rebel-admin/', false);
+});
+
 it('renders a specific section', function (): void {
     actingAsPanelAdmin();
 
