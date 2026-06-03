@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 use Illuminate\Auth\GenericUser;
+use Padosoft\Rebel\Admin\Panel\Sections;
 
 it('redirects unauthenticated visitors to login', function (): void {
     $this->get('/admin/rebel')->assertRedirect('/login');
@@ -53,6 +54,20 @@ it('shows an endpoint-pending state for sections without an API yet', function (
         ->assertOk()
         ->assertSee('Compliance Center')
         ->assertSee('upcoming release');
+});
+
+it('resolves every sidebar section URL (path may differ from key)', function (): void {
+    actingAsPanelAdmin();
+
+    // The sidebar links to each section's `path`; the route resolves that segment.
+    // 'risk-rules' (path) maps to key 'risk' — it must not 404.
+    foreach (Sections::all() as $section) {
+        $url = trim('/admin/rebel/'.$section['path'], '/');
+
+        $this->get($url)
+            ->assertOk()
+            ->assertSee($section['label']);
+    }
 });
 
 it('404s an unknown section', function (): void {

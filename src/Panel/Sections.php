@@ -37,7 +37,9 @@ final class Sections
     public static function find(string $key): ?array
     {
         foreach (self::all() as $section) {
-            if ($section['key'] === $key) {
+            // Resolve by `key` (used by the home route, e.g. 'overview') or by the URL
+            // `path` segment the sidebar links to (e.g. 'risk-rules' for key 'risk').
+            if ($section['key'] === $key || ($section['path'] !== '' && $section['path'] === $key)) {
                 return $section;
             }
         }
