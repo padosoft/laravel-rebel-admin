@@ -49,6 +49,7 @@
       RebelApi.get('/step-up/funnel'),                      // 6
       RebelApi.get('/auth-events?limit=60'),                // 7
       RebelApi.get('/providers/health'),                    // 8
+      RebelApi.get('/subjects'),                            // 9
     ]);
     const val = (i) => (settled[i].status === 'fulfilled' ? settled[i].value : null);
 
@@ -98,9 +99,10 @@
     if (co && co.nist) {
       const dist = co.nist.aal_distribution || {};
       const ex = co.psd2 && co.psd2.exemptions;
+      const apiAmr = co.amr && typeof co.amr === 'object' ? co.amr : null;
       D.compliance = {
         nist: { aal1: dist.aal1 || 0, aal2: dist.aal2 || 0, aal3: dist.aal3 || 0 },
-        amr: D.compliance.amr,
+        amr: apiAmr ? Object.keys(apiAmr).map((k) => ({ k, v: apiAmr[k] })) : D.compliance.amr,
         psd2: {
           sca_events: co.psd2 ? co.psd2.sca_events : 0,
           dynamic_linked: co.psd2 ? co.psd2.dynamic_linked : 0,
@@ -163,6 +165,29 @@
         ua: '—', country: '—',
       }));
       if (rows.length) { D.auditEvents = () => rows; }
+    }
+
+    // ── Subjects / devices / sessions (Device & Session Trust) ──
+    const subj = val(9);
+    if (subj && Array.isArray(subj.data)) {
+      D.subjectSearch = subj.data.map((s) => ({ id: s.subject, masked: s.masked, tenant: null, devices: s.devices, sessions: s.sessions }));
+      const first = subj.data[0];
+      if (first) {
+        try {
+          const dv = await RebelApi.get('/subjects/' + encodeURIComponent(first.subject) + '/devices');
+          const ss = await RebelApi.get('/subjects/' + encodeURIComponent(first.subject) + '/sessions');
+          D.devices = (dv && Array.isArray(dv.devices) ? dv.devices : []).map((d) => ({
+            id: d.id, fp: d.fingerprint || d.id, trusted: !!d.trusted, until: d.trusted_until || d.until || null,
+            last_seen: d.last_seen_at || d.last_seen || null, os: d.os || '—', browser: d.browser || '—', loc: d.location || '—', current: false,
+          }));
+          D.sessions = (ss && Array.isArray(ss.sessions) ? ss.sessions : []).map((x) => ({
+            id: x.id, type: x.type || 'session', status: x.status || 'active', device: x.device_id || '—',
+            created: x.created_at || null, expires: x.expires_at || null, current: false,
+          }));
+        } catch (e) { /* keep prior values on error */ }
+      } else {
+        D.subjectSearch = []; D.devices = []; D.sessions = [];
+      }
     }
   }
 
