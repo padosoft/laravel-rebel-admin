@@ -6,6 +6,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 
 ## [Unreleased]
 
+## [0.1.6] - 2026-06-03
+
+### Changed
+- **Audit detail shows country / IP / User-Agent.** The Audit Explorer now surfaces the real
+  `country` (from the captured CF-IPCountry header), the masked IP hash and the User-Agent
+  hash from the live API, instead of placeholders. Channel Performance shows delivered-rate /
+  cost once the provider's delivery webhook reports them. Requires admin-api >= 0.1.6.
+
 ## [0.1.5] - 2026-06-03
 
 ### Changed
