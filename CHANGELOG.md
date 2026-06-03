@@ -6,6 +6,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-06-03
+
+### Changed
+- **Honest channel/provider widgets.** The panel no longer falls back to the template's
+  illustrative sample for Channel Performance and Provider Health — it shows exactly what the
+  Admin API reports (zeros / empty until real delivery telemetry is captured), so the panel
+  never implies traffic that doesn't exist. Empty trend series are drawn as flat-zero lines
+  (valid SVG) instead of breaking the chart.
+
 ## [0.1.3] - 2026-06-03
 
 ### Changed
