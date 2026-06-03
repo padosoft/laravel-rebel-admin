@@ -8,12 +8,18 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 /**
- * Skeleton iniziale di padosoft/laravel-rebel-admin. Implementazione in arrivo.
+ * The Laravel Rebel Web Admin Panel: a Blade + vanilla-JS security-operations dashboard
+ * that hydrates entirely from the Rebel Admin API.
  */
 final class RebelAdminServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
-        $package->name('laravel-rebel-admin');
+        $package
+            ->name('laravel-rebel-admin')
+            ->hasConfigFile('rebel-admin')
+            ->hasViews('rebel-admin')
+            ->hasAssets()
+            ->hasRoute('web');
     }
 }
