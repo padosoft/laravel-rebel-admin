@@ -14,23 +14,22 @@ it('never open-redirects to an absolute login URL', function (): void {
     $this->get('/admin/rebel')->assertRedirect('/login');
 });
 
-it('renders the panel shell for an authorized admin', function (): void {
+it('serves the SPA host for an authorized admin', function (): void {
     actingAsPanelAdmin();
 
     $this->get('/admin/rebel')
         ->assertOk()
         ->assertSee('Laravel Rebel')
-        ->assertSee('Security Overview')   // the active section
-        ->assertSee('Audit Explorer')      // a sidebar nav entry
-        ->assertSee('data-rebel-widget="overview"', false);
+        ->assertSee('Security Overview')          // page <title> = current section label
+        ->assertSee('id="rebel-admin-root"', false) // the React mount point
+        ->assertSee('RebelAdminBoot', false);       // the client boot object
 });
 
 it('references the published asset path (vendor/rebel-admin), not the package name', function (): void {
     actingAsPanelAdmin();
 
     // spatie/laravel-package-tools publishes hasAssets() to public/vendor/{shortName},
-    // and the short name strips the "laravel-" prefix => "rebel-admin". The panel must
-    // point at that exact path or the CSS/JS 404 in a real app.
+    // and the short name strips the "laravel-" prefix => "rebel-admin".
     $this->get('/admin/rebel')
         ->assertOk()
         ->assertSee('vendor/rebel-admin/rebel-admin.css', false)
@@ -38,25 +37,7 @@ it('references the published asset path (vendor/rebel-admin), not the package na
         ->assertDontSee('vendor/laravel-rebel-admin/', false);
 });
 
-it('renders a specific section', function (): void {
-    actingAsPanelAdmin();
-
-    $this->get('/admin/rebel/audit')
-        ->assertOk()
-        ->assertSee('Audit Explorer')
-        ->assertSee('data-rebel-widget="audit"', false);
-});
-
-it('shows an endpoint-pending state for sections without an API yet', function (): void {
-    actingAsPanelAdmin();
-
-    $this->get('/admin/rebel/compliance')
-        ->assertOk()
-        ->assertSee('Compliance Center')
-        ->assertSee('upcoming release');
-});
-
-it('resolves every sidebar section URL (path may differ from key)', function (): void {
+it('boots the SPA with the requested section and resolves every sidebar URL', function (): void {
     actingAsPanelAdmin();
 
     // The sidebar links to each section's `path`; the route resolves that segment.
@@ -66,7 +47,8 @@ it('resolves every sidebar section URL (path may differ from key)', function ():
 
         $this->get($url)
             ->assertOk()
-            ->assertSee($section['label']);
+            ->assertSee($section['label'])                  // <title> label
+            ->assertSee('section: "'.$section['key'].'"', false); // boot picks the right page
     }
 });
 

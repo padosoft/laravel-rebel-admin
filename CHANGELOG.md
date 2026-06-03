@@ -6,6 +6,24 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-06-03
+
+### Changed
+- **Full panel UI.** Replaced the simplified Blade widget shell with the complete admin SPA
+  (ported from the design template): grouped sidebar (Monitor / Investigate / Intelligence),
+  tenant switcher, period selector, ⌘K command palette, live pill, theme toggle, and all ten
+  sections (Security Overview, OTP & Step-up funnels, Channel Performance, Provider Health,
+  Audit Explorer, Device & Session Trust, Risk Rules + simulator, Anomaly Detection, AI Copilot,
+  Compliance Center) with KPI cards, charts, drawers and toasts.
+- The panel now hydrates from the **live Admin API** (`laravel-rebel-admin-api` ≥ 0.1.3):
+  overview KPIs/timeseries/funnel, risk rules (read + **persist a draft**), anomalies,
+  compliance, step-up funnels, channels and audit events — with the template's illustrative
+  sample data kept only where an endpoint has no telemetry yet, so no widget ever breaks.
+
+### Build
+- `build.mjs` produces a single self-contained `resources/dist/rebel-admin.js` (production React
+  UMD + the app, JSX stripped by pure-JS Babel) — no CDN, no native bundler required.
+
 ## [0.1.2] - 2026-06-03
 
 ### Fixed
