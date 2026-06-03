@@ -83,17 +83,23 @@ and [`padosoft/laravel-rebel-admin-api`](https://github.com/padosoft/laravel-reb
 
 Building an auth-ops dashboard, compared:
 
-| Capability | **Rebel Admin Panel** | Generic admin (Nova/Filament) | Hand-rolled Blade dashboards |
-|---|:---:|:---:|:---:|
-| Purpose-built for the Rebel auth stack | ✅ | ❌ | ➖ |
-| API-driven (no direct DB coupling) | ✅ | ❌ | ❌ |
-| No JS framework / heavy build required | ✅ | ❌ | ✅ |
-| Built-in light/dark + tenant/period context | ✅ | ➖ | ❌ |
-| Explicit loading/empty/error per widget | ✅ | ➖ | ❌ |
-| Fail-closed access gate out of the box | ✅ | ➖ | ❌ |
-| Ships with the security section designs | ✅ | ❌ | ❌ |
+| Capability | **Rebel Admin Panel** | Shopify | Generic admin (Nova/Filament) | Hand-rolled Blade dashboards |
+|---|:---:|:---:|:---:|:---:|
+| Purpose-built for the Rebel auth stack | ✅ | ❌ | ❌ | ➖ |
+| API-driven (no direct DB coupling) | ✅ | ➖ | ❌ | ❌ |
+| No JS framework / heavy build required | ✅ | ❌ | ❌ | ✅ |
+| Self-hosted in your app (not hosted SaaS) | ✅ | ❌ | ✅ | ✅ |
+| Themeable Blade over your own data | ✅ | ❌ | ➖ | ✅ |
+| Hosted admin dashboard for staff | ✅ | ✅ | ✅ | ➖ |
+| Built-in light/dark + tenant/period context | ✅ | ➖ | ➖ | ❌ |
+| Explicit loading/empty/error per widget | ✅ | ➖ | ➖ | ❌ |
+| Fail-closed access gate out of the box | ✅ | ➖ | ➖ | ❌ |
+| Feature-flagged by installed Rebel packages | ✅ | ❌ | ❌ | ❌ |
+| Ships with the security section designs | ✅ | ➖ | ❌ | ❌ |
 
-> Legend: ✅ built-in · ➖ partial / DIY · ❌ not available.
+> Legend: ✅ built-in · ➖ partial / DIY / hosted-only / not exposed to you · ❌ not available.
+>
+> Note: Shopify is a hosted, closed commerce platform — it ships its own admin dashboard but you can't self-host it, extend it, point it at your own data/tenants, or treat it as a library for your app.
 
 ---
 
