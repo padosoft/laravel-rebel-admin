@@ -6,6 +6,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-06-03
+
+### Fixed
+- **Panel asset 404**: the panel shell referenced `vendor/laravel-rebel-admin/rebel-admin.{css,js}`,
+  but `spatie/laravel-package-tools` publishes `hasAssets()` to `public/vendor/rebel-admin/`
+  (the short name strips the `laravel-` prefix). The stylesheet and script returned 404 in a real
+  app. The view now points at `vendor/rebel-admin/...`; added a regression test pinning the path.
+
 ## [0.1.0] - 2026-06-03
 
 ### Added
