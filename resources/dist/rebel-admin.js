@@ -6491,10 +6491,11 @@ Object.assign(window, {
         channel: e.channel,
         purpose: e.purpose,
         risk_score: e.risk_score != null ? e.risk_score : 0,
-        ip_masked: '—',
+        ip_masked: e.ip_hmac ? String(e.ip_hmac).slice(0, 12) + '…' : '—',
         outcome: /fail|failed|high_score/.test(e.event_type) ? 'failed' : 'success',
-        ua: '—',
-        country: '—'
+        // User-Agent is stored as a keyed HMAC (GDPR) — show the hash prefix, not raw UA.
+        ua: e.user_agent_hash ? 'hashed·' + String(e.user_agent_hash).slice(0, 8) : '—',
+        country: e.country || '—'
       }));
       if (rows.length) {
         D.auditEvents = () => rows;
