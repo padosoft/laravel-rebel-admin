@@ -6420,27 +6420,38 @@ Object.assign(window, {
       }));
     }
 
-    // ── Channels (only override when there is real traffic) ──
+    // ── Channels (honest: show exactly what the API reports, even if empty/zero —
+    //    delivery telemetry capture is a roadmap item, so a fresh app shows no traffic). ──
     const ch = val(5);
-    if (ch && nonEmpty(ch.rows) && ch.rows.some(r => r.sent > 0)) {
+    if (ch && Array.isArray(ch.rows)) {
       D.channels = ch.rows.map(r => ({
         channel: r.channel,
         provider: r.provider || '—',
-        sent: r.sent,
-        delivered: r.delivered_rate,
-        fallback: r.fallback_rate,
+        sent: r.sent || 0,
+        delivered: r.delivered_rate || 0,
+        fallback: r.fallback_rate || 0,
         p50: r.latency_p50_ms,
         p95: r.latency_p95_ms,
         cost: r.cost_amount || 0,
         cur: r.cost_currency || 'EUR',
-        conv: r.verify_conversion,
+        conv: r.verify_conversion || 0,
         fraud: !!r.fraud_flag
       }));
+      // Flat-zero series (truthful "no traffic"), not empty arrays — an empty series
+      // makes the trend LineChart emit an invalid SVG path.
+      const zeros = [0, 0, 0, 0, 0, 0, 0];
+      D.channelTrend = {
+        labels: 7,
+        email: zeros,
+        sms: zeros,
+        whatsapp: zeros,
+        voice: zeros
+      };
     }
 
-    // ── Providers (only override when real telemetry exists) ──
+    // ── Providers (honest: real health rows only; empty until telemetry exists) ──
     const pr = val(8);
-    if (pr && nonEmpty(pr.providers)) {
+    if (pr && Array.isArray(pr.providers)) {
       D.providers = pr.providers.map(p => ({
         key: p.key,
         name: p.name || prettyKey(p.key),
@@ -6454,6 +6465,7 @@ Object.assign(window, {
         spark: p.spark || [],
         errors: p.recent_errors || []
       }));
+      D.incidents = [];
     }
 
     // ── Audit events ──
