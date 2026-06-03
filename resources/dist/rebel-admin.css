@@ -1,0 +1,70 @@
+/* Laravel Rebel — Admin Panel · design tokens + shell (Bootstrap-compatible, no deps) */
+:root {
+  --rebel-good: #1f9d55; --rebel-warn: #d9822b; --rebel-bad: #cc1f1a; --rebel-info: #2779bd; --rebel-neutral: #606f7b;
+  --rebel-sev-low: #3490dc; --rebel-sev-medium: #f6993f; --rebel-sev-high: #e3342f; --rebel-sev-critical: #9b1c1c;
+  --rebel-bg: #f7f8fa; --rebel-surface: #ffffff; --rebel-border: #e2e8f0; --rebel-text: #1a202c; --rebel-muted: #718096;
+  --rebel-radius: 10px; --rebel-shadow: 0 1px 3px rgba(0,0,0,.08); --rebel-gap: 16px;
+}
+[data-theme="dark"] {
+  --rebel-bg: #0f141a; --rebel-surface: #161d26; --rebel-border: #2a3542; --rebel-text: #e6edf3; --rebel-muted: #8b98a5;
+  --rebel-shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+* { box-sizing: border-box; }
+body.rebel { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--rebel-bg); color: var(--rebel-text); }
+.rebel-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.rebel-muted { color: var(--rebel-muted); }
+
+.rebel-app { min-height: 100vh; display: flex; flex-direction: column; }
+.rebel-topbar { display: flex; align-items: center; justify-content: space-between; gap: var(--rebel-gap);
+  padding: 10px 18px; background: var(--rebel-surface); border-bottom: 1px solid var(--rebel-border); }
+.rebel-brand { font-size: 16px; }
+.rebel-topbar-controls { display: flex; align-items: center; gap: 10px; }
+.rebel-field select { background: var(--rebel-surface); color: var(--rebel-text);
+  border: 1px solid var(--rebel-border); border-radius: var(--rebel-radius); padding: 6px 10px; }
+.rebel-btn { background: var(--rebel-surface); color: var(--rebel-text); border: 1px solid var(--rebel-border);
+  border-radius: var(--rebel-radius); padding: 6px 12px; cursor: pointer; }
+.rebel-btn:focus-visible, .rebel-nav-item:focus-visible, select:focus-visible { outline: 2px solid var(--rebel-info); outline-offset: 2px; }
+.rebel-user { width: 30px; height: 30px; border-radius: 50%; background: var(--rebel-info); color: #fff;
+  display: grid; place-items: center; }
+
+.rebel-body { flex: 1; display: flex; }
+.rebel-sidebar { width: 240px; flex-shrink: 0; background: var(--rebel-surface);
+  border-right: 1px solid var(--rebel-border); padding: 12px 0; }
+.rebel-sidebar ul { list-style: none; margin: 0; padding: 0; }
+.rebel-nav-item { display: block; padding: 10px 18px; color: var(--rebel-text); text-decoration: none; border-left: 3px solid transparent; }
+.rebel-nav-item:hover { background: var(--rebel-bg); }
+.rebel-nav-item.is-active { border-left-color: var(--rebel-info); font-weight: 600; background: var(--rebel-bg); }
+
+.rebel-content { flex: 1; padding: 22px 26px; }
+.rebel-breadcrumb { color: var(--rebel-muted); font-size: 13px; }
+.rebel-title { margin: 6px 0 18px; font-size: 22px; }
+
+.rebel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--rebel-gap); }
+.rebel-card { background: var(--rebel-surface); border: 1px solid var(--rebel-border);
+  border-radius: var(--rebel-radius); box-shadow: var(--rebel-shadow); padding: 16px; }
+.rebel-card .kpi-label { color: var(--rebel-muted); font-size: 13px; }
+.rebel-card .kpi-value { font-size: 28px; font-weight: 700; margin-top: 4px; }
+
+.rebel-table-wrap { background: var(--rebel-surface); border: 1px solid var(--rebel-border);
+  border-radius: var(--rebel-radius); box-shadow: var(--rebel-shadow); overflow: hidden; }
+table.rebel-table { width: 100%; border-collapse: collapse; }
+.rebel-table th, .rebel-table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--rebel-border); font-size: 14px; }
+.rebel-table th { color: var(--rebel-muted); font-weight: 600; }
+
+.rebel-skeleton { background: linear-gradient(90deg, var(--rebel-border) 25%, var(--rebel-bg) 37%, var(--rebel-border) 63%);
+  background-size: 400% 100%; animation: rebel-shimmer 1.4s ease infinite; border-radius: var(--rebel-radius);
+  min-height: 60px; color: transparent; padding: 18px; }
+@keyframes rebel-shimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+
+.rebel-empty, .rebel-error { background: var(--rebel-surface); border: 1px dashed var(--rebel-border);
+  border-radius: var(--rebel-radius); padding: 28px; text-align: center; }
+.rebel-empty-title { font-weight: 600; margin: 0 0 6px; }
+.rebel-error button { margin-top: 10px; }
+
+.rebel-toasts { position: fixed; top: 16px; right: 16px; display: flex; flex-direction: column; gap: 8px; z-index: 50; }
+.rebel-toast { background: var(--rebel-surface); border: 1px solid var(--rebel-border); border-left: 4px solid var(--rebel-info);
+  border-radius: var(--rebel-radius); box-shadow: var(--rebel-shadow); padding: 10px 14px; }
+.rebel-toast.is-error { border-left-color: var(--rebel-bad); }
+
+@media (max-width: 720px) { .rebel-sidebar { width: 64px; } .rebel-nav-item { font-size: 0; padding: 12px; } }
