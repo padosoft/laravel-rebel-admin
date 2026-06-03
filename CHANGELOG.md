@@ -6,6 +6,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-06-03
+
+### Changed
+- **Compliance AMR + Device & Session Trust now use live data.** The panel reads the real AMR
+  distribution from `compliance/overview`, and the Device & Session section is backed by the
+  Admin API's `subjects` list + `subjects/{id}/devices|sessions` (real devices/sessions) instead
+  of the template's sample rows. Requires `laravel-rebel-admin-api` ≥ 0.1.5.
+
 ## [0.1.4] - 2026-06-03
 
 ### Changed
