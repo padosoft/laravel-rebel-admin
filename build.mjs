@@ -15,7 +15,11 @@ const p = (rel) => root + rel;
 // 1) The app source: the concatenated template with ESM/import scaffolding stripped,
 //    so React/ReactDOM resolve to the UMD globals we prepend.
 const raw = readFileSync(p('resources/js/panel/main.jsx'), 'utf8');
-const appSrc = raw
+// Inject the live Admin API layer just before the app entry (after RebelData + all
+// components are defined, before ReactDOM renders).
+const apiLayer = readFileSync(p('resources/js/panel/api.js'), 'utf8');
+const withApi = raw.replace('// ===== app.jsx =====', apiLayer + '\n// ===== app.jsx =====');
+const appSrc = withApi
   .split(/\r?\n/)
   .filter((line) => !/^\s*import\s/.test(line) && !/^\s*window\.(React|ReactDOM)\s*=/.test(line))
   .join('\n');

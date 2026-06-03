@@ -1031,7 +1031,7 @@ function Topbar({ route, tenant, onTenant, period, onPeriod, theme, onTheme, onO
   return (
     <header className="topbar">
       <button className="iconbtn" style={{ display: 'none' }} id="mobileMenuBtn" onClick={onMobileMenu}><I.Menu size={16}/></button>
-      <img className="topbar-banner" src="assets/Laravel-Rebel-banner.png" alt="Laravel Rebel"
+      <img className="topbar-banner" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Laravel Rebel"
            style={{ display: 'var(--banner-disp, none)' }}/>
       <TenantSwitcher tenant={tenant} onChange={onTenant}/>
       <span className="ctrl-label" style={{ color: 'var(--text-tertiary)', fontSize: 11, fontWeight: 600 }}>Periodo</span>
@@ -1669,11 +1669,31 @@ function RiskPage({ ctx }) {
   const decisionLabel = { allow: 'Allow', require_step_up: 'Step-up richiesto', block: 'Block' }[result.decision];
   const decisionIco = { allow: <I.CheckCircle size={20}/>, require_step_up: <I.Shield size={20}/>, block: <I.Ban size={20}/> }[result.decision];
 
+  const saveDraft = async () => {
+    if (!window.RebelActions) { ctx.toast({ kind: 'error', title: 'API non disponibile' }); return; }
+    const rule = {
+      key: 'custom_' + Date.now(),
+      signal: signals.amount > 1000 ? 'amount' : (signals.new_device ? 'new_device' : 'velocity'),
+      operator: '>', value: signals.amount,
+      action: result.decision === 'block' ? 'block' : 'require_step_up',
+      required_assurance: result.required_assurance,
+      phishing_resistant: !!result.require_phishing_resistant,
+      status: 'draft',
+    };
+    try {
+      await window.RebelActions.saveRiskRule(rule);
+      ctx.toast({ kind: 'success', title: 'Regola salvata come draft', body: rule.key });
+      setTimeout(() => window.location.reload(), 650);
+    } catch (e) {
+      ctx.toast({ kind: 'error', title: 'Salvataggio fallito', body: String(e) });
+    }
+  };
+
   return (
     <div className="page fade-in">
       <PageHead crumb="Risk Rules" title="Risk Rules"
                 sub="Visualizza e simula le regole di rischio. La simulazione è read-only e sicura — le regole si salvano come draft."
-                actions={<button className="btn"><I.Plus className="icon"/>Nuova regola (draft)</button>}/>
+                actions={<button className="btn" onClick={saveDraft}><I.Plus className="icon"/>Nuova regola (draft)</button>}/>
 
       <div className="notice info" style={{ marginBottom: 16 }}><I.Info size={15} className="icon"/>Le modifiche alle regole non vengono mai applicate al volo: si salvano come <b style={{margin:'0 4px'}}>draft</b> e richiedono un permesso elevato per l'attivazione.</div>
 
@@ -2631,9 +2651,21 @@ function Shell() {
   }, []);
   const [tweaks, setTweak] = window.useTweaks ? window.useTweaks(TWEAK_DEFAULTS) : [fallback[0], fallbackSetter];
 
-  const [route, setRoute] = React.useState('overview');
+  const [route, setRoute] = React.useState((window.RebelAdminBoot && window.RebelAdminBoot.section) || 'overview');
   const [tenant, setTenant] = React.useState('northwind');
   const [period, setPeriod] = React.useState('24h');
+  const [ready, setReady] = React.useState(!window.rebelHydrate);
+  const [dataVer, setDataVer] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!window.rebelHydrate) return;
+    let alive = true;
+    setReady(false);
+    window.rebelHydrate(period)
+      .catch(() => {})
+      .finally(() => { if (alive) { setReady(true); setDataVer(v => v + 1); } });
+    return () => { alive = false; };
+  }, [tenant, period]);
   const [paletteOpen, setPaletteOpen] = React.useState(false);
   const [alertsOpen, setAlertsOpen] = React.useState(false);
   const [collapsed, setCollapsed] = React.useState(false);
@@ -2686,8 +2718,8 @@ function Shell() {
                 onOpenPalette={() => setPaletteOpen(true)}
                 autoRefresh={autoRefresh} onAutoRefresh={setAutoRefresh}
                 lastTick={lastTick} onAlerts={() => setAlertsOpen(true)}/>
-        <div className="content" key={route}>
-          <Page ctx={ctx}/>
+        <div className="content" key={route + ':' + dataVer}>
+          {ready ? <Page ctx={ctx}/> : <div className="state"><b>Caricamento dati…</b></div>}
         </div>
       </div>
 
