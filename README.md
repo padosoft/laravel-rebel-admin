@@ -1,5 +1,8 @@
 # Laravel Rebel — Web Admin Panel
 
+> Official documentation: https://doc.laravel-rebel.padosoft.com
+
+
 > **A security-operations dashboard for your auth stack.** A clean Blade + vanilla-JS panel that hydrates entirely from the [Rebel Admin API](https://github.com/padosoft/laravel-rebel-admin-api): security overview, OTP/step-up funnels, channels, providers, audit explorer, devices, risk rules, anomalies, AI copilot and compliance — light/dark, tenant-aware, no JS framework required. Part of the `padosoft/laravel-rebel-*` suite.
 
 <p align="center">
@@ -208,3 +211,4 @@ composer pint      # code style
 ```
 
 **License:** MIT — see [LICENSE](LICENSE). Part of the [`padosoft/laravel-rebel`](https://github.com/padosoft) suite.
+
