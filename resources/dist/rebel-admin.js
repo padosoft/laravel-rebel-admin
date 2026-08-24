@@ -1157,7 +1157,9 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     impossible_travel: 'Impossible Travel',
     otp_bombing: 'OTP Bombing',
     credential_stuffing: 'Credential Stuffing',
-    device_anomaly: 'Device Anomaly'
+    device_anomaly: 'Device Anomaly',
+    delegation_exchange_burst: 'Delegation Exchange Burst (IAM)',
+    delegation_scope_probing: 'Delegation Scope Probing (IAM)'
   };
 
   // ── AI Copilot canned responses ──
@@ -1749,6 +1751,16 @@ function fmtDateTime(ts) {
 }
 function fmtNum(n) {
   return n == null ? '—' : n.toLocaleString('en-US');
+}
+// Segnali eterogenei per tipo di caso: boolean e oggetti (es. refusal_reasons
+// dei casi delegation, una mappa reason→conteggio) non sono renderizzabili come
+// child React grezzi — coerciamo tutto a stringa leggibile.
+function fmtSignal(v) {
+  if (v == null) return '—';
+  if (typeof v === 'boolean') return v ? 'Sì' : 'No';
+  if (Array.isArray(v)) return v.map(fmtSignal).join(', ');
+  if (typeof v === 'object') return Object.entries(v).map(([k, n]) => `${k} ×${n}`).join(', ');
+  return String(v);
 }
 function fmtMoney(n, cur = 'EUR') {
   const sym = cur === 'EUR' ? '€' : cur === 'USD' ? '$' : '';
@@ -5129,7 +5141,7 @@ function AnomaliesPage({
     className: "reason-chip"
   }, /*#__PURE__*/React.createElement("span", {
     className: "tertiary"
-  }, k, ":"), "\xA0", /*#__PURE__*/React.createElement("b", null, v))))), /*#__PURE__*/React.createElement("div", {
+  }, k, ":"), "\xA0", /*#__PURE__*/React.createElement("b", null, fmtSignal(v)))))), /*#__PURE__*/React.createElement("div", {
     className: "drawer-section"
   }, /*#__PURE__*/React.createElement("h5", null, "Timeline eventi"), /*#__PURE__*/React.createElement("div", {
     className: "timeline"
@@ -6347,7 +6359,7 @@ Object.assign(window, {
         signals: a.signals || {},
         geo: null,
         timeline: [],
-        actions: []
+        actions: a.suggested_actions || []
       }));
       if (cases.length) {
         D.anomalyCases = cases;
