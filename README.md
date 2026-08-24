@@ -146,6 +146,14 @@ Device & Session Trust · Risk Rules · Anomaly Detection · AI Security Copilot
 Center. See [`docs/admin-panel-template-spec.md`](docs/admin-panel-template-spec.md) for the
 full per-section component + endpoint specification.
 
+**Anomaly Detection** also shows the **IAM delegated-access cases** opened by
+[`laravel-rebel-ai-guard`](https://github.com/padosoft/laravel-rebel-ai-guard) ≥ 0.1.3 on the
+delegation audit stream (*Delegation Exchange Burst (IAM)*, *Delegation Scope Probing (IAM)*),
+with the refusal-reason breakdown and the `auto_suspended` flag readable in the case drawer and
+a destructive **suspend-agent** pointer that routes through the confirm modal — the suspension
+itself is performed in the IAM console, the ecosystem's central kill-switch. Requires
+[`rebel-admin-api`](https://github.com/padosoft/laravel-rebel-admin-api) ≥ 0.1.8.
+
 ---
 
 ## Architecture
