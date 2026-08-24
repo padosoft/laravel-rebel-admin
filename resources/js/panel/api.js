@@ -77,7 +77,7 @@
       const cases = an.data.map((a) => ({
         id: a.id, type: a.type, severity: a.severity, status: a.status,
         events: a.events_count, opened_at: a.opened_at, tenant: null,
-        signals: a.signals || {}, geo: null, timeline: [], actions: [],
+        signals: a.signals || {}, geo: null, timeline: [], actions: a.suggested_actions || [],
       }));
       if (cases.length) { D.anomalyCases = cases; D.openAnomalies = cases.filter((c) => c.status === 'open'); }
       // keep anomalyTypes labels, add any unknown type as a Title-Cased label

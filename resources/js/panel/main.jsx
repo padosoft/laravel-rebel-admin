@@ -228,7 +228,7 @@ window.ReactDOM = ReactDOM;
       timeline: [{ t: '2026-06-01T15:18:00Z', event: 'Fingerprint instabile', detail: '7 cambi in 1h', sev: 'info' }],
       actions: [{ key: 'require_reverify', label: 'Richiedi re-verifica device', destructive: false }] },
   ];
-  const anomalyTypes = { sms_pumping: 'SMS Pumping', impossible_travel: 'Impossible Travel', otp_bombing: 'OTP Bombing', credential_stuffing: 'Credential Stuffing', device_anomaly: 'Device Anomaly' };
+  const anomalyTypes = { sms_pumping: 'SMS Pumping', impossible_travel: 'Impossible Travel', otp_bombing: 'OTP Bombing', credential_stuffing: 'Credential Stuffing', device_anomaly: 'Device Anomaly', delegation_exchange_burst: 'Delegation Exchange Burst (IAM)', delegation_scope_probing: 'Delegation Scope Probing (IAM)' };
 
   // ── AI Copilot canned responses ──
   const aiResponses = {
@@ -407,6 +407,16 @@ function fmtRel(ts) {
 function fmtClock(ts) { return new Date(ts).toISOString().slice(11, 19); }
 function fmtDateTime(ts) { return new Date(ts).toISOString().slice(0, 16).replace('T', ' '); }
 function fmtNum(n) { return n == null ? '—' : n.toLocaleString('en-US'); }
+// Segnali eterogenei per tipo di caso: boolean e oggetti (es. refusal_reasons
+// dei casi delegation, una mappa reason→conteggio) non sono renderizzabili come
+// child React grezzi — coerciamo tutto a stringa leggibile.
+function fmtSignal(v) {
+  if (v == null) return '—';
+  if (typeof v === 'boolean') return v ? 'Sì' : 'No';
+  if (Array.isArray(v)) return v.map(fmtSignal).join(', ');
+  if (typeof v === 'object') return Object.entries(v).map(([k, n]) => `${k} ×${n}`).join(', ');
+  return String(v);
+}
 function fmtMoney(n, cur = 'EUR') {
   const sym = cur === 'EUR' ? '€' : cur === 'USD' ? '$' : '';
   return sym + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -1921,7 +1931,7 @@ function AnomaliesPage({ ctx }) {
             <h5>Segnali</h5>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {Object.entries(selected.signals).map(([k, v]) => (
-                <div key={k} className="reason-chip"><span className="tertiary">{k}:</span>&nbsp;<b>{v}</b></div>
+                <div key={k} className="reason-chip"><span className="tertiary">{k}:</span>&nbsp;<b>{fmtSignal(v)}</b></div>
               ))}
             </div>
           </div>
