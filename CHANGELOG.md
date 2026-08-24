@@ -6,11 +6,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 
 ## [Unreleased]
 
-## [0.1.1] - 2026-08-24
+## [0.1.7] - 2026-08-24
 
 ### Added
 - **Delegation anomaly cases in the Anomaly Detection page** (rebel-ai-guard ≥ 0.1.3 via
-  rebel-admin-api ≥ 0.1.5): explicit type labels `Delegation Exchange Burst (IAM)` /
+  rebel-admin-api ≥ 0.1.8): explicit type labels `Delegation Exchange Burst (IAM)` /
   `Delegation Scope Probing (IAM)`, and the case drawer now maps `suggested_actions` from
   the API list payload (destructive `suspend_agent` routes through the existing confirm
   modal — the actual suspension is performed in the IAM console, the central kill-switch).
@@ -98,6 +98,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 - Config file, publishable views + assets, CI matrix (PHP 8.3/8.4/8.5 × Laravel 12/13),
   Pest feature suite, PHPStan level max, Pint.
 
-[Unreleased]: https://github.com/padosoft/laravel-rebel-admin/compare/v0.1.1...HEAD
-[0.1.1]: https://github.com/padosoft/laravel-rebel-admin/compare/v0.1.0...v0.1.1
+[Unreleased]: https://github.com/padosoft/laravel-rebel-admin/compare/v0.1.7...HEAD
+[0.1.7]: https://github.com/padosoft/laravel-rebel-admin/compare/v0.1.6...v0.1.7
 [0.1.0]: https://github.com/padosoft/laravel-rebel-admin/releases/tag/v0.1.0
