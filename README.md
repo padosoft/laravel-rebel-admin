@@ -154,6 +154,17 @@ a destructive **suspend-agent** pointer that routes through the confirm modal �
 itself is performed in the IAM console, the ecosystem's central kill-switch. Requires
 [`rebel-admin-api`](https://github.com/padosoft/laravel-rebel-admin-api) ≥ 0.1.8.
 
+It also shows the **scheduled-routine cases** the same detector opens on the
+[`laravel-routines`](https://github.com/padosoft/laravel-routines) ledger — *Routine Fire Burst*,
+*Routine Failure Loop*, *Routine Mandate Probing* and *Routine Approval Starvation*.
+
+The last one is the one worth knowing about. A routine that paused to ask, and that nobody
+answered, is behaving **exactly as designed** — it does not act without permission — so it throws
+nothing, logs nothing and trips no monitor while the thing it was meant to do quietly does not
+happen. The case carries the oldest unanswered question verbatim, so the operator can answer from
+the drawer instead of hunting for which of N pauses is the stale one, and the destructive action
+suspends the routine so it stops accumulating more.
+
 ---
 
 ## Architecture
