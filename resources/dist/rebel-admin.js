@@ -1151,6 +1151,51 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
       label: 'Richiedi re-verifica device',
       destructive: false
     }]
+  }, {
+    id: 'case_4802',
+    type: 'routine_approval_starvation',
+    severity: 'high',
+    status: 'open',
+    events: 3,
+    opened_at: '2026-06-01T09:00:00Z',
+    tenant: 'helvetia',
+    signals: {
+      routine_id: 'rt_01J8ZQ',
+      routine_name: 'Solleciti fatture scadute',
+      unanswered: 3,
+      waiting_since: '2026-05-29T03:00:00Z',
+      hours_threshold: 24,
+      oldest_question: 'Chiudere la fattura INV-003, scaduta da 400 giorni?'
+    },
+    geo: {
+      x: 46,
+      y: 33
+    },
+    timeline: [{
+      t: '2026-05-29T03:00:00Z',
+      event: 'Routine in pausa',
+      detail: 'invoice.write_off fuori dal mandato',
+      sev: 'info'
+    }, {
+      t: '2026-05-30T03:00:00Z',
+      event: 'Seconda pausa senza risposta',
+      detail: 'la prima domanda aspetta da 24h',
+      sev: 'warn'
+    }, {
+      t: '2026-06-01T09:00:00Z',
+      event: 'Anomalia aperta',
+      detail: '3 domande senza risposta, la piu\' vecchia da 3 giorni',
+      sev: 'high'
+    }],
+    actions: [{
+      key: 'answer',
+      label: 'Rispondi alla domanda piu\' vecchia',
+      destructive: false
+    }, {
+      key: 'suspend_routine',
+      label: 'Sospendi la routine',
+      destructive: true
+    }]
   }];
   const anomalyTypes = {
     sms_pumping: 'SMS Pumping',
@@ -1159,7 +1204,11 @@ function _extends() { return _extends = Object.assign ? Object.assign.bind() : f
     credential_stuffing: 'Credential Stuffing',
     device_anomaly: 'Device Anomaly',
     delegation_exchange_burst: 'Delegation Exchange Burst (IAM)',
-    delegation_scope_probing: 'Delegation Scope Probing (IAM)'
+    delegation_scope_probing: 'Delegation Scope Probing (IAM)',
+    routine_fire_burst: 'Routine Fire Burst',
+    routine_failure_loop: 'Routine Failure Loop',
+    routine_mandate_probing: 'Routine Mandate Probing',
+    routine_approval_starvation: 'Routine Approval Starvation'
   };
 
   // ── AI Copilot canned responses ──
